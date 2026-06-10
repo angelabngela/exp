@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Career Path Finder - Fully Customizable Options</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c3483 0%, #a2b6df 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0c3483, #1e5799);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .progress-container {
+            background: #e0e5ec;
+            height: 8px;
+            position: relative;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #00b894, #00cec9);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .progress-text {
+            text-align: center;
+            padding: 10px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #0c3483;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .question-number {
+            color: #0c3483;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 22px;
+            color: #2d3436;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .question-context {
+            font-size: 14px;
+            color: #636e72;
+            margin-bottom: 25px;
+            padding: 12px 15px;
+            background: #dfe6e9;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 18px 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            line-height: 1.3;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Two-option styles */
+        .btn-option1 {
+            background: linear-gradient(135deg, #FE6100, #FFB000);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 192, 0, 0.3);
+        }
+
+        .btn-option1:hover {
+            box-shadow: 0 10px 25px rgba(255, 192, 0, 0.4);
+        }
+
+        .btn-option2 {
+            background: linear-gradient(135deg, #DC267F, #d63031);
+            color: white;
+            box-shadow: 0 5px 15px rgba(254, 48, 49, 0.3);
+        }
+
+        .btn-option2:hover {
+            box-shadow: 0 10px 25px rgba(254, 48, 49, 0.4);
+        }
+
+        /* Three-option additional button */
+        .btn-option3 {
+            background: linear-gradient(135deg, #785EF0, #a855f7);
+            color: white;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-option3:hover {
+            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        /* Two-option specific spacing */
+        .options.two-options .btn {
+            flex: 1;
+            padding: 18px 30px;
+            font-size: 18px;
+        }
+
+        /* Three-option specific spacing */
+        .options.three-options .btn {
+            flex: 1;
+            padding: 16px 12px;
+            font-size: 15px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .result-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .result-title {
+            font-size: 32px;
+            color: #0c3483;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .result-description {
+            font-size: 16px;
+            color: #636e72;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: left;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .detail-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #636e72;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 18px;
+            color: #2d3436;
+            font-weight: 600;
+        }
+
+        .path-history {
+            margin-top: 20px;
+            text-align: left;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .path-history h3 {
+            margin-bottom: 15px;
+            color: #0c3483;
+        }
+
+        .path-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #636e72;
+        }
+
+        .path-item:last-child {
+            border-bottom: none;
+        }
+
+        .path-answer {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .path-answer.option1 { background: #d4edda; color: #155724; }
+        .path-answer.option2 { background: #f8d7da; color: #721c24; }
+        .path-answer.option3 { background: #e8daef; color: #6c3483; }
+
+        .btn-restart {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #0c3483, #1e5799);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(12, 52, 131, 0.4);
+        }
+
+        .option-indicator {
+            display: inline-block;
+            background: #0c3483;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .option-indicator.two { background: #00b894; }
+        .option-indicator.three { background: #6c5ce7; }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .options {
+                flex-direction: column;
+            }
+            .content {
+                padding: 20px;
+            }
+            .question-text {
+                font-size: 18px;
+            }
+            .btn {
+                padding: 14px 20px;
+                font-size: 16px;
+            }
+            .options.three-options .btn {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icon">🏥</div>
+            <h1>Medical Career Path Finder</h1>
+            <p>Discover the perfect medical specialty for your personality and goals</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+        </div>
+        <div class="progress-text" id="progressText">Starting assessment...</div>
+
+        <div class="content">
+            <div id="questionArea">
+                <div class="question-card">
+                    <div class="question-number" id="questionNumber">Question 1</div>
+                    <div class="question-text" id="questionText"></div>
+                    <div class="question-context" id="questionContext"></div>
+                    <div class="options" id="optionsContainer">
+                        <!-- Buttons will be dynamically created -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultArea" class="hidden">
+                <div class="result-card" id="resultCard">
+                    <div class="result-icon" id="resultIcon"></div>
+                    <div class="result-title" id="resultTitle"></div>
+                    
+                    <div class="result-description" id="resultDescription"></div>
+
+                    <div class="result-details" id="resultDetails"></div>
+
+                    <div class="path-history" id="pathHistory"></div>
+
+                    <button class="btn-restart" onclick="restartAssessment()">
+                        🔄 Take Assessment Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Decision tree with FULLY CUSTOMIZABLE options
+        // Each node can have:
+        // - options: 2 or 3
+        // - label1: "text" (custom label for first button - replaces "Yes")
+        // - label2: "text" (custom label for second button - replaces "No" or becomes third button)
+        // - label3: "text" (custom label for third button - only for 3-option questions)
+
+        const decisionTree = {
+            start: {
+                question: "What type of medical student are you?",
+                context: "Different types of learners find their strengths in different fields.",
+                options: 2,
+                label1: "Crazy",
+                label2: "Sane",
+                option1:"crazyBranch",
+                option2:"X",
+            },
+            
+            crazyBranch: {
+                question: "Do you have a good attention span?",
+                context: "Some medical fields require you to dedicate more time on each task.",
+                options: 2,
+                label1: "Yes",
+                label2: "No",
+                option1: {
+                    result: "Psychiatry",
+                    icon: "🕵️",
+                    title: "Psychiatry",
+                    description: "Diagnoses and treats mental health conditions — depression, anxiety, psychosis, bipolar disorder — using medication, therapy, and psychosocial interventions.",
+                    details: [
+                        { label: "Training Length", value: "4 yrs (+ fellowship optional)" },
+                        { label: "Work Setting", value: "Outpatient clinic, inpatient hospital, telehealth" },
+                        { label: "Work-Life Balance", value: "Great" },
+                        { label: "Average Salary (Pre-Tax)", value: "331K" }
+                    ]
+                },
+                option2: {
+                    result: "Emergency Medicine",
+                    icon: "🚑",
+                    title: "Emergency Medicine",
+                    description: "Provides immediate assessment and stabilisation of acute illness and trauma in the ED — from cardiac arrests and major trauma to fractures and chest pain — across all ages and conditions.",
+                    details: [
+                        { label: "Training Length", value: "3 years" },
+                        { label: "Work Setting", value: "Hospital emergency department (shift-based)" },
+                        { label: "Work-Life Balance", value: "Moderate" },
+                        { label: "Average Salary (Pre-Tax)", value: "421K" }
+                    ]
+                },
+            },
+            
+            X: {
+                question: "Are you hard working?",
+                context: "Some medical fields require more discipline than others.",
+                options: 2,
+                label1: "Yes",
+                label2: "No",
+                option1: "attitudeBranch",
+		option2: "lightBranch",
+	},
+            
+            attitudeBranch: {
+                question: "What attitude do you want to have when working?",
+                context: "How you interact with others impacts your job.",
+                options: 3,
+                label1: "Nice",
+                label2: "Mean",
+		label3: "Doesn't matter",
+                option1: "childrenBranch",
+                option2: "coordinationBranch",
+		option3: "stateBranch",
+            },
+
+            lightBranch: {
+                question: "Are you more afraid of light or the dark?",
+                context: "People in different medical fields spend different amounts of time exposed to light/darkness.",
+                options: 2,
+                label1: "Light",
+                label2: "Dark",
+                option1: {
+                    result: "Radiology",
+                    icon: "🩻",
+                    title: "Radiology",
+                    description: "Interprets medical imaging (X-ray, CT, MRI, ultrasound, nuclear medicine) to diagnose disease. Interventional radiologists also perform minimally invasive image-guided procedures.",
+                    details: [
+                        { label: "Training Length", value: "5 yrs (1 prelim + 4 DR; + fellowship)" },
+                        { label: "Work Setting", value: "Hospital radiology dept, teleradiology, outpatient imaging" },
+                        { label: "Work-Life Balance", value: "Great" },
+                        { label: "Average Salary (Pre-Tax)", value: "571K" }
+                    ]
+                },
+                option2: "thoughtBranch",
+            },
+
+		coordinationBranch:{
+		question: "How is our coordination?",
+		context: "Some fields require you to be more coordinated.",
+		options: 2,
+		label1: "Precise",
+                label2: "Clumsy",
+                option1: {
+                    result: "Neurosurgery",
+                    icon: "🧠",
+                    title: "Neurosurgery",
+                    description: "Operates on the brain, spinal cord, and peripheral nerves — treating tumours, aneurysms, trauma, hydrocephalus, and degenerative spine disease. One of the most technically demanding and high-stakes surgical specialties.",
+                    details: [
+                        { label: "Training Length", value: "7 yrs (+ fellowship common)" },
+                        { label: "Work Setting", value: "Hospital (academic/level-1 trauma), OR, ICU" },
+                        { label: "Work-Life Balance", value: "Poor" },
+                        { label: "Average Salary (Pre-Tax)", value: "749K" }
+                    ]
+                },
+                option2: {
+                    result: "General Surgery",
+                    icon: "🧵",
+                    title: "General Surgery",
+                    description: "Performs operations on the abdomen, GI tract, breast, endocrine glands, and soft tissue — from emergency appendectomies and bowel resections to elective cholecystectomies and hernia repairs.",
+                    details: [
+                        { label: "Training Length", value: "5 yrs (+ 1–2 yr fellowship common)" },
+                        { label: "Work Setting", value: "Hospital OR, trauma centre, outpatient clinic" },
+                        { label: "Work-Life Balance", value: "Poor" },
+                        { label: "Average Salary (Pre-Tax)", value: "442K" }
+                    ]
+                },
+
+
+	},
+		thoughtBranch: {
+                question: "Do you think BIG or SMALL?",
+                context: "Some people do or don't care about the details...",
+                options: 2,
+                label1: "Big",
+                label2: "Small",
+                option1: "bigBranch",
+                option2: "smallBranch",
+            },
+		bigBranch: {
+                question: "Do you enjoy doing physical activity?",
+                context: "Some fields require you to get active",
+                options: 2,
+                label1: "Yes",
+                label2: "No",
+                option1: {
+                    result: "Orthopaedics",
+                    icon: "⚒️",
+                    title: "Orthopaedics",
+                    description: "Diagnoses and treats musculoskeletal conditions — fractures, joint disease, sports injuries, spine disorders — combining surgical interventions (joint replacement, trauma fixation) with non-operative management.",
+                    details: [
+                        { label: "Training Length", value: "5 yrs (+ 1–2 yr fellowship common)" },
+                        { label: "Work Setting", value: "Hospital OR, outpatient clinic, trauma centre" },
+                        { label: "Work-Life Balance", value: "Moderate" },
+                        { label: "Average Salary (Pre-Tax)", value: "611K" }
+                    ]
+                },
+                option2: {
+                    result: "Dermatology",
+                    icon: "☀️",
+                    title: "Dermatology",
+                    description: "Manages diseases of the skin, hair, and nails — from eczema and acne to melanoma — including both medical and cosmetic/surgical procedures.",
+                    details: [
+                        { label: "Training Length", value: "4 yrs (1 prelim + 3 derm)" },
+                        { label: "Work Setting", value: "Outpatient clinic, private practice" },
+                        { label: "Work-Life Balance", value: "Great" },
+                        { label: "Average Salary (Pre-Tax)", value: "448K" }
+                    ]
+                },
+            },
+		smallBranch: {
+                question: "What's your favourite colour?",
+                context: "You see all kinds of colours in the health workforce.",
+                options: 3,
+                label1: "Pink/Red",
+                label2: "Blue/Green/Brown",
+		label3: "Yellow",
+                option1: {
+                    result: "ENT",
+                    icon: "🧠",
+                    title: "ENT (Otolaryngology)",
+                    description: "Treats conditions of the ear, nose, throat, head and neck — hearing loss, sinus disease, thyroid cancer, obstructive sleep apnoea — combining clinic-based medicine with complex head and neck surgery.",
+                    details: [
+                        { label: "Training Length", value: "5 yrs (+ fellowship optional)" },
+                        { label: "Work Setting", value: "Outpatient clinic, hospital OR, ambulatory surgery" },
+                        { label: "Work-Life Balance", value: "Moderate" },
+                        { label: "Average Salary (Pre-Tax)", value: "508K" }
+                    ]
+                },
+                option2: {
+                    result: "Opthalmology",
+                    icon: "👁️",
+                    title: "Opthalmology",
+                    description: "Diagnoses and treats disorders of the eye and vision — cataracts, glaucoma, retinal disease — combining medical management with surgical procedures like cataract and LASIK surgery.",
+                    details: [
+                        { label: "Training Length", value: "4 yrs (1 prelim + 3 ophtho; + fellowship)" },
+                        { label: "Work Setting", value: "Outpatient clinic, ambulatory surgery centre" },
+                        { label: "Work-Life Balance", value: "Great" },
+                        { label: "Average Salary (Pre-Tax)", value: "446K" }
+                    ]
+                },
+		option3: {
+                    result: "Urology",
+                    icon: "💛",
+                    title: "Urology",
+                    description: "Treats diseases of the urinary tract and male reproductive system — kidney stones, prostate cancer, bladder disorders, incontinence — using both medical management and endoscopic/open surgery.",
+                    details: [
+                        { label: "Training Length", value: "5 yrs (1 surgery + 4 urology)" },
+                        { label: "Work Setting", value: "Outpatient clinic, hospital OR, ambulatory surgery" },
+                        { label: "Work-Life Balance", value: "Moderate" },
+                        { label: "Average Salary (Pre-Tax)", value: "535K" }
+                    ]
+                },
+},
+
+childrenBranch: {
+                question: "Do you prefer working with adults or children?",
+                context: "You might have to deal with different kinds of patients.",
+                options: 3,
+                label1: "Children",
+                label2: "Adults",
+		label3: "Neither",
+                option1: {
+                    result: "Pediatrics",
+                    icon: "👶",
+                    title: "Pediatrics",
+                    description: "Delivers primary and specialty care for infants, children, and adolescents — managing everything from routine well-child visits and vaccinations to complex childhood illnesses.",
+                    details: [
+                        { label: "Training Length", value: "3 yrs (+ 2–3 yr fellowship if subspecialising)" },
+                        { label: "Work Setting", value: "Outpatient clinic, children's hospital, community practice" },
+                        { label: "Work-Life Balance", value: "Good" },
+                        { label: "Average Salary (Pre-Tax)", value: "266K" }
+                    ]
+                },
+                option2: {
+                    result: "Adult Medicine",
+                    icon: "🧑",
+                    title: "Adult Medicine",
+                    description: "Focuses on the prevention, diagnosis, and treatment of adult diseases. Internists manage complex multi-system conditions and serve as the backbone of hospital inpatient care.",
+                    details: [
+                        { label: "Training Length", value: "3 yrs (+ 2–3 yr fellowship if subspecialising)" },
+                        { label: "Work Setting", value: "Outpatient clinic, hospital inpatient, hospitalist" },
+                        { label: "Work-Life Balance", value: "Good" },
+                        { label: "Average Salary (Pre-Tax)", value: "$307K" }
+                    ]
+                },
+		option3:"neatBranch"
+            },
+	neatBranch: {
+                question: "Do you like things neat or messy?",
+                context: "You should be ready for anything",
+                options: 2,
+                label1: "Neat",
+                label2: "Messy",
+                option1: {
+                    result: "Family Practice",
+                    icon: "👪",
+                    title: "Family Practice",
+                    description: "Provides cradle-to-grave primary care for patients of all ages — managing chronic disease, acute illness, preventive care, and minor procedures across the full scope of general medicine.",
+                    details: [
+                        { label: "Training Length", value: "3 yrs" },
+                        { label: "Work Setting", value: "Outpatient primary care clinic, community health" },
+                        { label: "Work-Life Balance", value: "Good" },
+                        { label: "Average Salary (Pre-Tax)", value: "288K" }
+                    ]
+                },
+                option2: {
+                    result: "OB/GYN",
+                    icon: "🔍",
+                    title: "OB/GYN",
+                    description: "Covers women's reproductive health — prenatal care, labour and delivery, gynaecological surgery, fertility, and menopause. Combines outpatient medicine, surgical procedures, and obstetric emergencies.",
+                    details: [
+                        { label: "Training Length", value: "4 yrs (+ 4 yr MFM/REI fellowship optional)" },
+                        { label: "Work Setting", value: "Hospital L&D, outpatient clinic, OR" },
+                        { label: "Work-Life Balance", value: "Moderate" },
+                        { label: "Average Salary (Pre-Tax)", value: "390K" }
+                    ]
+                },
+            },
+stateBranch: {
+                question: "What state would you prefer the patient to be in?",
+                context: "Patients come in all kinds of states and sizes.",
+                options: 3,
+                label1: "Asleep",
+                label2: "Paralysed",
+		label3: "Dead",
+                option1: {
+                    result: "Anesthesia",
+                    icon: "🧠",
+                    title: "Anesthesia",
+                    description: "Manages pain and unconsciousness during surgery and procedures, oversees critical care in the ICU, and provides pain management. Combines pharmacology, physiology, and real-time crisis management.",
+                    details: [
+                        { label: "Training Length", value: "4 yrs (1 base yr + 3 CA; + fellowship)" },
+                        { label: "Work Setting", value: "Hospital OR, ICU, ambulatory surgery centre" },
+                        { label: "Work-Life Balance", value: "Good" },
+                        { label: "Average Salary (Pre-Tax)", value: "543K" }
+                    ]
+                },
+                option2: "personalityBranch",
+		option3: {
+                    result: "Pathology",
+                    icon: "💉",
+                    title: "Pathology",
+                    description: "Diagnoses disease by examining tissue samples, blood, and body fluids in the laboratory. Pathologists are the doctors behind biopsy results, autopsies, and lab testing.",
+                    details: [
+                        { label: "Training Length", value: "4 yrs (+ fellowship optional)" },
+                        { label: "Work Setting", value: "Hospital laboratory, academic centre" },
+                        { label: "Work-Life Balance", value: "Great" },
+                        { label: "Average Salary (Pre-Tax)", value: "394K" }
+                    ]
+                },
+            },
+     
+		personalityBranch: {
+                question: "How is your personality",
+                context: "Some work suits different personalities better.",
+                options: 2,
+                label1: "Insensitive",
+                label2: "Sensitive",
+                option1: {
+                    result: "Neurology",
+                    icon: "🧠",
+                    title: "Neurology",
+                    description: "Diagnoses and treats disorders of the brain, spinal cord, and peripheral nerves — including stroke, epilepsy, multiple sclerosis, Parkinson's disease, and headache disorders.",
+                    details: [
+                        { label: "Training Length", value: "4 yrs (1 prelim IM + 3 neurology)" },
+                        { label: "Work Setting", value: "Outpatient clinic, hospital inpatient, academic centre" },
+                        { label: "Work-Life Balance", value: "Good" },
+                        { label: "Average Salary (Pre-Tax)", value: "341K" }
+                    ]
+                },
+                option2: {
+                    result: "Rehab Medicine",
+                    icon: "🏋️",
+                    title: "Rehab medicine (PM&R)",
+                    description: "Restores function and quality of life after disabling conditions — stroke, spinal cord injury, TBI, amputation, chronic pain — using physical, occupational, and medical rehabilitation.",
+                    details: [
+                        { label: "Training Length", value: "4 yrs (1 prelim + 3 PM&R)" },
+                        { label: "Work Setting", value: "Inpatient rehab unit, outpatient clinic, academic centre" },
+                        { label: "Work-Life Balance", value: "Good" },
+                        { label: "Average Salary (Pre-Tax)", value: "359K" }
+                    ]
+                },
+}
+            };
+
+        let currentNode = 'start';
+        let questionCount = 0;
+        let path = [];
+
+        function countQuestions(nodeId, visited = new Set()) {
+            if (visited.has(nodeId)) return 0;
+            visited.add(nodeId);
+            
+            const node = decisionTree[nodeId];
+            if (!node || node.result) return 1;
+            
+            let count = 1;
+            const options = node.options || 2;
+            
+            if (node.option1 && typeof node.option1 === 'string') count += countQuestions(node.option1, visited);
+            if (options === 3 && node.option3 && typeof node.option3 === 'string') count += countQuestions(node.option3, visited);
+            if (node.option2 && typeof node.option2 === 'string') count += countQuestions(node.option2, visited);
+            
+            return count;
+        }
+
+        function startAssessment() {
+            currentNode = 'start';
+            questionCount = 0;
+            path = [];
+            
+            document.getElementById('questionArea').classList.remove('hidden');
+            document.getElementById('resultArea').classList.add('hidden');
+            
+            updateProgress();
+            showQuestion(currentNode);
+        }
+
+        function updateProgress() {
+            const totalQuestions = countQuestions('start');
+            const progress = Math.min((questionCount / totalQuestions) * 100, 90);
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = 
+                `Question ${questionCount} of approximately ${totalQuestions}`;
+        }
+
+        function showQuestion(nodeId) {
+            const node = decisionTree[nodeId];
+            questionCount++;
+            
+            document.getElementById('questionNumber').textContent = 
+                `Question ${questionCount}`;
+            document.getElementById('questionText').textContent = node.question;
+            document.getElementById('questionContext').textContent = node.context || '';
+            
+            const numOptions = node.options || 2;
+            const optionsContainer = document.getElementById('optionsContainer');
+            
+            if (numOptions === 3) {
+                const label1 = node.label1 || "Yes";
+                const label2 = node.label2 || "No";
+                const label3 = node.label3 || "Somewhat";
+                
+                optionsContainer.className = 'options three-options';
+                optionsContainer.innerHTML = `
+                    <button class="btn btn-option1" onclick="handleAnswer('option1')">
+                        ${label1}
+                    </button>
+                    <button class="btn btn-option3" onclick="handleAnswer('option3')">
+                        ${label3}
+                    </button>
+                    <button class="btn btn-option2" onclick="handleAnswer('option2')">
+                        ${label2}
+                    </button>
+                `;
+            } else {
+                const label1 = node.label1 || "Yes";
+                const label2 = node.label2 || "No";
+                
+                optionsContainer.className = 'options two-options';
+                optionsContainer.innerHTML = `
+                    <button class="btn btn-option1" onclick="handleAnswer('option1')">
+                        ${label1}
+                    </button>
+                    <button class="btn btn-option2" onclick="handleAnswer('option2')">
+                        ${label2}
+                    </button>
+                `;
+            }
+            
+            updateProgress();
+        }
+
+        function handleAnswer(answer) {
+            const node = decisionTree[currentNode];
+            
+            // Determine the label based on which button was clicked
+            let displayLabel;
+            if (answer === 'option1') {
+                displayLabel = node.label1 || "Yes";
+            } else if (answer === 'option3') {
+                displayLabel = node.label3 || "Somewhat";
+            } else {
+                displayLabel = node.label2 || "No";
+            }
+            
+            path.push({
+                question: node.question,
+                answer: displayLabel,
+                answerType: answer,
+                context: node.context,
+                options: node.options || 2
+            });
+            
+            // Determine next node based on answer
+            let nextNode = node[answer];
+            
+            if (typeof nextNode === 'object' && nextNode !== null) {
+                // We've reached a result
+                showResult(nextNode);
+            } else if (typeof nextNode === 'string') {
+                // Continue to next question
+                currentNode = nextNode;
+                showQuestion(currentNode);
+            } else {
+                console.error('Invalid node structure', node, answer);
+            }
+        }
+
+        function showResult(result) {
+            document.getElementById('questionArea').classList.add('hidden');
+            document.getElementById('resultArea').classList.remove('hidden');
+            
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('progressText').textContent = 'Assessment Complete!';
+            
+            document.getElementById('resultIcon').textContent = result.icon;
+            document.getElementById('resultTitle').textContent = result.title;
+            document.getElementById('resultDescription').textContent = result.description;
+            
+            // Populate details
+            const detailsHtml = result.details.map(detail => `
+                <div class="detail-box">
+                    <div class="detail-label">${detail.label}</div>
+                    <div class="detail-value">${detail.value}</div>
+                </div>
+            `).join('');
+            document.getElementById('resultDetails').innerHTML = detailsHtml;
+            
+            // Populate reasoning path
+            const pathHtml = path.map((step, index) => `
+                <div class="path-item">
+                    <strong>Q${index + 1}:</strong> ${step.question}
+                    ${step.options === 3 ? '<span class="option-indicator three">3 options</span>' : '<span class="option-indicator two">2 options</span>'}
+                    <br>
+                    <span class="path-answer ${step.answerType}">→ ${step.answer}</span>
+                </div>
+            `).join('');
+            document.getElementById('pathHistory').innerHTML = 
+                `<h3>📋 Your Decision Path</h3>${pathHtml}`;
+            
+            document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartAssessment() {
+            startAssessment();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', function(event) {
+            const node = decisionTree[currentNode];
+            if (!node) return;
+            
+            const numOptions = node.options || 2;
+            
+            if (!document.getElementById('resultArea').classList.contains('hidden')) return;
+            
+            if (numOptions === 3) {
+                if (event.key === 'ArrowLeft' || event.key === 'a') {
+                    handleAnswer('option1');
+                } else if (event.key === 'ArrowDown' || event.key === 's') {
+                    handleAnswer('option3');
+                } else if (event.key === 'ArrowRight' || event.key === 'd') {
+                    handleAnswer('option2');
+                }
+            } else {
+                if (event.key === 'ArrowLeft' || event.key === 'a') {
+                    handleAnswer('option1');
+                } else if (event.key === 'ArrowRight' || event.key === 'd') {
+                    handleAnswer('option2');
+                }
+            }
+        });
+
+        // Initialize
+        startAssessment();
+    </script>
+</body>
+</html>
